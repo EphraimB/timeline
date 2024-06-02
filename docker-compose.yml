@@ -1,0 +1,13 @@
+services:
+  server:
+    build:
+      context: ./server/
+      dockerfile: Dockerfile
+    networks:
+      - app-network
+    ports:
+      - "5001:5001"
+    # working_dir: "/home/node/app"
+networks:
+  app-network:
+    driver: bridge
