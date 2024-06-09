@@ -3,11 +3,28 @@ services:
     build:
       context: ./server/
       dockerfile: Dockerfile
+    environment:
+      - PGHOST=db
+      - PGDATABASE=${PGDB}
+      - PGUSER=${PGUSER}
+      - PGPASSWORD=${PGPASSWORD}
+      - PGPORT=${PGPORT}
     networks:
       - app-network
     ports:
       - "5001:5001"
-    # working_dir: "/home/node/app"
+    working_dir: "/home/node/app"
+    depends_on:
+      - db
+  db:
+    image: "postgres:16-bookworm"
+    environment:
+      - POSTGRES_USER=${PGUSER}
+      - POSTGRES_HOST=${PGHOST}
+      - POSTGRES_PASSWORD=${PGPASSWORD}
+      - POSTGRES_DB=${PGDB}
+    ports:
+      - "${PGPORT:-5432}:5432"
 networks:
   app-network:
     driver: bridge
